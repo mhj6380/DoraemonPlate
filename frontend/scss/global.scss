@@ -1,0 +1,33 @@
+@import '_vars.scss';
+// Mobile
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;  
+    text-decoration: none;
+}
+
+.page-content{      
+    width:100%;
+    padding-top: 50px;
+    background: blue;
+}
+
+// Tablet
+@media (min-width: 768px) {
+    
+    
+}
+// Pc  
+@media (min-width: 992px) { 
+    .page-content{
+        width:992px;
+        margin: 0 auto;
+    } 
+}
+// Wide PC
+@media (min-width: 1200px) {
+    .page-content{
+        width:1200px;
+    }
+}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var BACKEND_URL = \"http://localhost:8080\";","map":{"version":3,"sources":["/Users/munhagju/WebstormProjects/DoraemonPlate/frontend/config.ts"],"names":["BACKEND_URL"],"mappings":"AAAA,OAAO,IAAMA,WAAW,GAAG,uBAApB","sourcesContent":["export const BACKEND_URL = \"http://localhost:8080\";"]},"metadata":{},"sourceType":"module"}
