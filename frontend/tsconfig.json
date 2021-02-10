@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "allowJs": true,
     "alwaysStrict": true,
     "esModuleInterop": true,
@@ -17,7 +18,9 @@
     "skipLibCheck": true,
     "strict": false,  
     "target": "esnext"
+    
   },
+  
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "pages/index.js", "pages/_app.js", "store/configureStore.js", "pages/_document.js", "sagas/user.js", "sagas/index.js"]
+  "include": ["**/*.ts", "**/*.tsx", "pages/index.js", "pages/_app.js", "store/configureStore.js", "pages/_document.js", "sagas/user.js", "sagas/index.js", "components/ProgressContainer.jsx"]
 }   

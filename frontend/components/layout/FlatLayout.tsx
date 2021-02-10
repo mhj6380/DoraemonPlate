@@ -1,7 +1,6 @@
 // import Link from "next/link";
 import styled from "styled-components";
-import React, { useEffect,ReactNode } from "react";
-import { useSelector } from "react-redux";
+import React, { ReactNode } from "react";
 import Head from 'next/head';
 
 interface LayoutProps {
@@ -42,13 +41,9 @@ const FlatContainer = styled.div`
 `;
 
 const AppLayout = ({ children,title,requiredLogin }:LayoutProps) => {
-  const { me } = useSelector((state:any) => state.user);
 
-  useEffect(() => {
-    console.log(requiredLogin);
-    console.log("LA HAHAY", me);
-  }, [me]);
   
+
   return (
     <>
     <div className="container-fluid">
@@ -79,7 +74,7 @@ const AppLayout = ({ children,title,requiredLogin }:LayoutProps) => {
     </div>
       <LayoutFooter>
         <div className="inner">
-            푸터
+          푸터{ JSON.stringify(requiredLogin)}
         </div>
       </LayoutFooter>
     </>

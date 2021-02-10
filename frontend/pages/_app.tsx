@@ -1,34 +1,32 @@
-import wrapper from "../store/configureStore";
-import withReduxSage from "next-redux-saga";
 import 'bootstrap/dist/css/bootstrap.css'
-import '../scss/global.scss'; 
-import Cookies from "js-cookie";
-import jwtDecode from "jwt-decode";
-import { useDispatch } from "react-redux";
-import { loadUserRequestAction } from "../reducers/user";
+import 'scss/global.scss';  
+import { AuthProvider } from "lib/providers/authProvider"; 
+import { ChatProvider } from "lib/providers/chatProvider";    
 import React from 'react';
+import { SwitchTransition, CSSTransition } from "react-transition-group";
+import { useRouter } from "next/router";
 
-interface token {
-  user_id: string;
-}
+const AppProvider = ({ contexts, children }) => contexts.reduce(
+  (prev:any, context:any) => React.createElement(context, {
+    children: prev 
+  }), 
+  children
+);
 
-const App = ({ Component }) => {
-  const accessToken = Cookies.get("accessToken");
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    
-    if (accessToken) {
-      dispatch(loadUserRequestAction({ data: jwtDecode<token>(accessToken).user_id }));
-    }
-  
-  }, []);
-
+const App = ({ Component, pageProps }) => {
+  const router = useRouter();
   return (
-    <>
-      <Component /> 
+    <> 
+      <AppProvider contexts={[AuthProvider,ChatProvider]}>  
+        <SwitchTransition mode='out-in'>
+          <CSSTransition key={router.pathname} classNames='page' timeout={300}>
+            <Component  {...pageProps} /> 
+          </CSSTransition>
+        </SwitchTransition>
+       </AppProvider>
     </>
   );
 };
 
-export default wrapper.withRedux(withReduxSage(App));
+export default App; 
+ 

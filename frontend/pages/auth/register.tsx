@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import axios from "axios";
 import { TextField } from "@material-ui/core";
-import { BACKEND_URL } from '../../config';
-import { useCookies } from "react-cookie";
 import { Title,ViewWrapper,LoginFormWrapper,NoAccount,CheckboxWrapper,FieldWrapper,SubmitBtn,ValidationAlert } from './styled';
-import { useSelector } from 'react-redux';
+import axios from "util/axios";  
 import { useRouter } from 'next/router';
+import { useCookies } from "react-cookie"; 
 
 const RegisterForm = () => { 
-  const { me } = useSelector((state:any) => state.user);
   const Router = useRouter();
-
-  const [email, setEmail] = React.useState("");
-  const [nickname, setNickname] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [passwordConfirm, setPasswordConfirm] = React.useState("");
+  const [email, setEmail] = React.useState("hakgu@gmail.com"); 
+  const [nickname, setNickname] = React.useState("hakgu");
+  const [password, setPassword] = React.useState("roahdla99!");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("roahdla99!");
   const [agree, setAgree] = React.useState(false);
-  const [cookies, setCookie] = useCookies(["accessToken"]);
+  const [cookies, setCookie] = useCookies(["accessToken"]); 
  
   // ValidationForm
   const [valiEmail, setValiEmail] = useState("");
   const [valiPwd, setValiPwd] = useState("");
   const [valiPwdConfirm, setValiPwdConfirm] = useState("");
   const [valiNickname, setValiNickname] = useState("");
+  
+  
   
 
   const handleOnSubmit = async (e:any) => {
@@ -65,27 +63,26 @@ const RegisterForm = () => {
 
 
     try {
-      const token:any = await axios 
-        .post(BACKEND_URL + "/auth/register", { 
+      const token:any = await axios  
+        .post("/auth/register", { 
           user_id: email,
           password,
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      
-      if (token.status === 200) {
-        setCookie("accessToken", token.data.accessToken, {
+          nickname 
+        }) 
+     
+      console.log(token);
+      console.log(token.data);
+      if (token.status === 201) {  
+        setCookie("accessToken", token.data.access_token, {
           path: "/",
-          maxAge: 100000,
+          maxAge: 100000, 
         });
-        setCookie("refreshToken", token.data.refreshToken, {
+        setCookie("refreshToken", token.data.refresh_token, { 
           path: "/",
           maxAge: 700000,
-        }); 
+        });  
         console.log(cookies); 
         alert(token.data.message); 
-        window.location.href = "/"; 
         return;
       } else {
         alert(token.data.message);
@@ -163,7 +160,11 @@ const RegisterForm = () => {
   };
 
   // 이미 로그인중이라면 메인으로 
-  if (me) Router.push('/'); 
+  // if (me) Router.push('/'); 
+
+  if (cookies.accessToken) {
+    Router.push('/'); 
+  }
 
   return (
     <ViewWrapper>

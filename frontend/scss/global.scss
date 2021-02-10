@@ -1,32 +1,95 @@
+
 @import '_vars.scss';
+// fonts 폴더 경로 추가.
+
 // Mobile
 *{
     padding:0;
     margin:0;
     box-sizing: border-box;  
     text-decoration: none;
-}
+    font-size: 1em;      
+} 
 
+
+html * {
+    line-height: 1.3;
+}
+body{
+  padding-top:45px;
+}
+li{
+  list-style: none;
+}
+button{
+  box-shadow: none;
+  border: none;
+  cursor:pointer;
+}
+a{ 
+  color: #1a1a1a;
+}
+a:hover{
+  text-decoration: none;
+  color: #1a1a1a;
+}
 .page-content{      
     width:100%;
-    padding-top: 50px;
-    background: blue;
+    padding: 50px 0;
+}
+
+
+.no_mobile {
+  display: none;
+}
+
+.inner{
+  width:100%;
 }
 
 // Tablet
 @media (min-width: 768px) {
+  
     
+  .no_mobile {
+    display: inline-block;
+}
+
+
+.no_tablet {
+    display: none;
+}
     
 }
 // Pc  
 @media (min-width: 992px) { 
+
+    body{
+      padding-top:55px;
+    }
+    .inner{
+      width:992px;
+      margin: 0 auto;
+    }
     .page-content{
         width:992px;
         margin: 0 auto;
     } 
+
+
+    .no_tablet {
+      display: inline-block;
+    }
+ 
+    .no_pc {
+        display: none;
+    }
 }
 // Wide PC
 @media (min-width: 1200px) {
+  .inner{
+    width:1200px;
+}
     .page-content{
         width:1200px;
     }

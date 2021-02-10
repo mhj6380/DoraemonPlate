@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
-import FlatLayout from "../components/layout/FlatLayout";
+import React from "react";
+import FlatLayout from "components/layout/FlatLayout";
 import styled from 'styled-components';
 import Link from 'next/link';
+import Cookies from "js-cookie";
 import { AiOutlineGlobal } from "react-icons/ai";
+import { useRouter } from 'next/router';
 
 const IntroWrapper = styled.div`
-background:blue;
-.inner{
+.inner{ 
   width:100%;
   padding:30px 0;
   max-width:380px;
@@ -66,6 +67,13 @@ const TopicWrapper = styled.div`
 
 
 const Intro = () => {
+  const Router = useRouter();
+  const accessToken = Cookies.get("accessToken");
+
+  if (accessToken) {
+    Router.push("/");
+  }
+
   return (
     <FlatLayout title="도라에몽"> 
       <IntroWrapper className="row">

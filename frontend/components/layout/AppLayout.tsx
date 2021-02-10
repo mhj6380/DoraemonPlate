@@ -1,62 +1,27 @@
 // import Link from "next/link";
-import styled from "styled-components";
-import React, { useEffect,ReactNode } from "react";
-import { useSelector } from "react-redux";
-import Head from 'next/head';
-import Cookies from "js-cookie";
-import { useRouter } from 'next/router';
-
-interface LayoutProps {
-  children: ReactNode;
-  title: string;
-  requiredLogin?: boolean; 
-} 
- 
-
-const LayoutHeader = styled.header`
-  width:100%; 
-  height:50px;
-  position:fixed;
-  top:0;
-  left:0;
-  background:#fff;
-  z-index:10;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-`;
+import React, { useEffect } from "react";
+import Head from 'next/head';  
+import Cookies from "js-cookie"; 
+import { useRouter } from 'next/router'; 
+import {  useAuthDispatch } from "../../lib/providers/authProvider"; 
+import jwtDecode from "jwt-decode"; 
+import { BACKEND_URL } from "../../config"; 
+  
+import Header from "./header/BasicHeader"; 
+import Footer from "./footer/BasicFooter"; 
 
 
-const LayoutFooter = styled.footer`
-    width:100%; 
-    height:50px;
-    background:#333; 
-    color:#e3e3e3;
-    .inner{
-      padding:15px;
-      width: 100%;
-      margin: 0 auto;
-    }
 
-    @media (min-width: 992px) { 
-      .inner{
-          width:992px;
-          padding:0;
-      }
-    }
-    @media (min-width: 1200px) { 
-      .inner{
-          width:1200px;
-      }
-    }
-`;
-
-const AppLayout = ({ children,title,requiredLogin }:LayoutProps) => {
-  const { me } = useSelector((state:any) => state.user);
+const AppLayout = ({ children,title,requiredLogin }:any) => {
+  
+  // const me = useAuthState();
+  const dispatch = useAuthDispatch();
   const Router = useRouter();
+  const accessToken = Cookies.get("accessToken");
 
-  useEffect(() => {
+  useEffect(() => { 
 
     if (requiredLogin) {
-      const accessToken = Cookies.get("accessToken");
       console.log("로그인 필수 페이지"); 
       if (!accessToken) {
         // 로그인되어있지 않다면 로그인창으로
@@ -64,15 +29,28 @@ const AppLayout = ({ children,title,requiredLogin }:LayoutProps) => {
       } 
     }
 
-    console.log(requiredLogin);
-    console.log("LA HAHAY", me);
+    if (!accessToken) {
+      // 로그인되어있지 않다면 로그인창으로
+      // Router.push("/login");
+    } else {
+      // 로그인 되어있다면 
+       
+      console.log(BACKEND_URL + "/auth/" + jwtDecode<any>(accessToken).user_id);
+      // axios.get(
+      //   BACKEND_URL + "/auth/" + jwtDecode<any>(accessToken).user_id
+      // ).then((res:any) => { 
+      //   console.log(res.data); 
+      //   const userInfo = res.data;
+      //   dispatch({ type: "UPDATE_USER", userInfo });
+      // })
+    }
+    
   }, []); 
   
   return (
     <>
-    <LayoutHeader>
-    홈페이지헤더 
-  </LayoutHeader> 
+   
+      <Header/>
     <div className="container-fluid">
       <Head>
       <title>{title}</title>
@@ -96,16 +74,17 @@ const AppLayout = ({ children,title,requiredLogin }:LayoutProps) => {
 
         <div className="page-content">
           {children}
+          {/* {JSON.stringify(children)} */}
         </div>
 
     </div>
-      <LayoutFooter>
-        <div className="inner">
-            푸터
-        </div>
-      </LayoutFooter>
+      
+      <Footer />  
     </>
   );
 };
 
-export default AppLayout;
+
+
+
+export default AppLayout;    

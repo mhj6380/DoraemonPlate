@@ -2,17 +2,16 @@ import React, { useCallback } from "react";
 import Link from "next/link";
 import { TextField } from "@material-ui/core";
 import axios from 'axios';
-import { BACKEND_URL } from '../../config'; 
+import { BACKEND_URL } from 'config';  
 import { useCookies } from "react-cookie";
 import { Title, ViewWrapper, LoginFormWrapper, NoAccount, CheckboxWrapper, ForgotPassword, FieldWrapper, SubmitBtn } from './styled';
-import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
 const LoginForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [cookies, setCookie] = useCookies(["accessToken"]);
-  const { me } = useSelector((state:any) => state.user);
+  
   const Router = useRouter();
 
   const handleSubmit = useCallback((e: any) => {
@@ -25,21 +24,21 @@ const LoginForm = () => {
     axios.post(`${BACKEND_URL}/auth/login`, {
       user_id: email,
       password
-    }).then((res:any) => {
-      if (res.status === 200) {
-        if (!res.data.accessToken || !res.data.refreshToken) return alert("토큰 발급 에러입니다!");
-        console.log(cookies); 
-        setCookie("accessToken", res.data.accessToken, {
-          path: "/",
-          maxAge: 100000,
-        });
-        setCookie("refreshToken", res.data.refreshToken, { 
-          path: "/",
-          maxAge: 700000,
-        }); 
-        window.location.href = "/"; 
-        return;
-      }
+    }).then((res: any) => {
+      console.log(res.data);
+      if (!res.data.access_token) return alert("토큰 발급 에러입니다!");
+      setCookie("accessToken", res.data.access_token, {
+        path: "/",
+        maxAge: 100000,
+      });
+      setCookie("refreshToken", res.data.refresh_token, { 
+        path: "/",
+        maxAge: 700000,
+      }); 
+      window.location.href = "/"; 
+      return;
+
+
     }).catch(function (error) { 
       if (error.response) {
         // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
@@ -64,7 +63,10 @@ const LoginForm = () => {
 
 
   // 이미 로그인중이라면 메인으로 
-  if (me) Router.push('/'); 
+  // if (me) Router.push('/'); 
+  if (cookies.accessToken) {
+    Router.push('/'); 
+  }
 
   return (
     <ViewWrapper> 

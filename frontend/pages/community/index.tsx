@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-import AppLayout from "../../components/layout/AppLayout";
-import CommunityList from '../../components/community/CommunityList'; 
-// import
+import React from "react";
+import TransitionLayout from "components/layout/TransitionLayout";
+import BasicPageTitle from 'components/layout/pagetitle/BasicPageTitle';  
 
-const Home = () => {
-  // const dispatch = useDispatch();
-  // const { me } = useSelector((state:any) => state.user);
 
-  return (
-    <AppLayout title="커뮤니티" requiredLogin={false}> 
-      <CommunityList />
-    </AppLayout>
-  );
+const CommunityPage = ():JSX.Element => {   
+  return ( 
+    <>
+      <BasicPageTitle title="커뮤니티" description="커뮤니티 페이지 작업예정" />  
+      <TransitionLayout title="커뮤니티" requiredLogin={true}>   
+        COMMUNITY 
+      </TransitionLayout>
+    </>
+  ); 
 };
 
-export default Home;
+  
+export default CommunityPage;  

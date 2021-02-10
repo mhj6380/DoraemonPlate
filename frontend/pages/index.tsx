@@ -1,72 +1,58 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import AppLayout from "../components/layout/AppLayout";
-import { LOAD_POSTS_REQUEST } from "../reducers/post";
-// import
-import Cookies from "js-cookie";
-import jwtDecode from "jwt-decode";
-import { loadUserRequestAction } from "../reducers/user";   
+import React from "react";
+import AppLayout from "components/layout/AppLayout";
 import Link from 'next/link';
-
-const Home = () => {
-  const { me } = useSelector((state: any) => state.user);
-  const accessToken = Cookies.get("accessToken");
-  const dispatch = useDispatch(); 
-
-  const {
-    mainPosts,
-    hasMorePosts,
-    loadPostsError,
-    loadPostsLoading,
-  } = useSelector((state:any) => state.post);
-
-  useEffect(() => {
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
-    console.log("me", me);
-  }, [me]);
-
-  useEffect(() => {
-    function onScroll() {
-      console.log(
-        window.scrollY,
-        document.documentElement.clientHeight,
-        document.documentElement.scrollHeight
-      );
-
-      if (
-        window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 300
-      ) {
-        if (hasMorePosts && !loadPostsLoading) {
-          console.log("loadPostsLoading", loadPostsLoading);
-          dispatch({
-            type: LOAD_POSTS_REQUEST,
-          });
-        }
-      }
-    }
-
-    console.log("hasMorePost", hasMorePosts);
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [hasMorePosts, loadPostsLoading]);
+import { InferGetServerSidePropsType } from 'next'
+import Axios from "axios";  
+import { BACKEND_URL } from "config";
+import Cookies from "cookies";
+import jwtDecode from "jwt-decode"; 
+import BasicPageTitle from 'components/layout/pagetitle/BasicPageTitle'; 
+import {  useAuthDispatch } from "lib/providers/authProvider";
+ // import { useAuthState } from "lib/providers/authProvider";      
+// import axios from "axios"; 
 
 
-  const handleTest = () => {
-    dispatch(loadUserRequestAction({ data:jwtDecode<any>(accessToken).user_id })); 
-  }
-
+const Home = ({ data }:InferGetServerSidePropsType<typeof getServerSideProps>):any => {  
+  // const me = useAuthState();
+  // React.useEffect(() => {
+  //   console.log("data", data);
+  // }, []);
   return (
-    <AppLayout title="도라에모옹" requiredLogin={true}> 
-      {loadPostsError}
-      <button onClick={handleTest}>TEST</button> 
-      <Link href="/auth/login">LOGIN</Link>
-    </AppLayout>
+    <>
+      <BasicPageTitle title="언노운 24" description="아직 정해진 것은 아무것도 없다. 하지만 모든 준비는 끝이 났다." /> 
+      <AppLayout title="Doraemon" requiredLogin={true}> 
+      
+      </AppLayout>
+    </>
   );
 };
+
+  
+ 
+
+export const getServerSideProps = async (context: any) => { 
+  // AUTH 
+  // const cookie =  context.req ? context.req.headers.cookie : ''; 
+  // Axios.defaults.headers.Cookie = cookie; 
+  // const userData = await Axios.get(`${BACKEND_URL}/auth/token-to-user`);  
+  const cookies = new Cookies(context.req);
+  const decoded: any = cookies.get('accessToken') ? jwtDecode(cookies.get('accessToken')) : ''; 
+  // const dispatch = useAuthDispatch();
+
+  let userData:any = {
+    data:null
+  }
+
+  if (decoded) {
+    userData = await Axios.get(`${BACKEND_URL}/auth/${decoded.user_id}`);
+    // const test = userData.data;
+  }  
+  // context.store.dispatch({ type: "UPDATE_USER", userInfo: userData.data }); 
+  return { 
+    props: {
+      data: userData.data,
+    },
+  }
+}
 
 export default Home;
