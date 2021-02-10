@@ -29,6 +29,7 @@ export class AuthService {
     return null; 
   }
 
+
   // 로그인 Validation
   async validateUser(user_id: string, pass: string): Promise<any> {
     const user = await this.getOne(user_id);
@@ -50,16 +51,21 @@ export class AuthService {
 
     const user = new User();
     user.user_id = userData.user_id;
-    user.password = userData.password;
-    user.nickname = userData.nickname; 
+    user.password = userData.password; 
+    user.nickname = userData.nickname;  
     await this.userRepository.save(user); 
 
     const accessToken = await this.jwtService.signAsync({ user_id: userData.user_id });
+    const refreshToken = await this.jwtService.signAsync({ user_id: userData.user_id });
+
+    console.log("REGISTER DEBUG!");
+    console.log(accessToken); 
 
       return {
          statusCode: 200,
          expires_in: 3600,
-         access_token: accessToken,
+         access_token: accessToken, 
+         refresh_token: refreshToken,
          user_data:userData,
          message:"회원가입 성공!"
       };
@@ -73,10 +79,12 @@ export class AuthService {
       }
       
       const accessToken = await this.jwtService.signAsync({ user_id: userData.user_id });
+      const refreshToken = await this.jwtService.signAsync({ user_id: userData.user_id });
 
       return {
          expires_in: 3600,
-         access_token: accessToken,
+         access_token: accessToken, 
+         refresh_token: refreshToken,
          user_id: userData.user_id, 
          statusCode: 200,
          message:"로그인 성공!"

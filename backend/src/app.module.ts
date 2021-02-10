@@ -4,7 +4,10 @@ import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import Joi from 'joi';
+import { ChatModule } from './chat/chat.module';
+import { AppGateway } from './app.gateway';
+
+// import Joi from 'joi';
 
 @Module({
   imports: [
@@ -39,10 +42,11 @@ import Joi from 'joi';
       keepConnectionAlive: true 
       // synchronize: true,
     }),
-    AuthModule, 
+    AuthModule,
+    ChatModule, 
   ],
-  controllers: [AppController],  
-  providers: [],   
+  controllers: [AppController],   
+  providers: [AppGateway],   
 })
 export class AppModule {
   constructor(private readonly connection: Connection) {} 

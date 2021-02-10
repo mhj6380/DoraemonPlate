@@ -1,4 +1,4 @@
-import { Controller,Delete,Get, Param, Post,Patch, Body,UseGuards } from '@nestjs/common'; 
+import { Controller,Delete,Get, Param, Post,Patch, Body,UseGuards,Req } from '@nestjs/common'; 
 import { AuthService } from './auth.service'; 
 import { LoginUserDTO } from './dto/login-user.dto';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -37,10 +37,9 @@ export class AuthController {
 
   @Get('/:user_id')  
   getOneUser(@Param("user_id") user_id: string): Promise<User>{
-    console.log(user_id);
-    console.log(typeof user_id); 
     return this.userService.getOne(user_id);   
   } 
+
 
  
   @Delete("/:user_id")

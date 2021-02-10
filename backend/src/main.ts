@@ -13,7 +13,8 @@ async function bootstrap() {
     //Request Body를 원하는 타입으로 자동변환 해줌 number of string ...
     transform: true
   }));  
+  app.enableCors();
   await app.listen(8080); 
 }
 bootstrap();
- 
+  
