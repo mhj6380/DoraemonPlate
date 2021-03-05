@@ -1,5 +1,5 @@
 // import Link from "next/link";
-import styled from "styled-components";
+// import styled from "styled-components";
 import React, { useEffect } from "react";
 import Head from 'next/head';  
 import Cookies from "js-cookie";
@@ -10,6 +10,7 @@ import { BACKEND_URL } from "../../config";
 import Header from "./header/BasicHeader"; 
 import Footer from "./footer/BasicFooter"; 
 import { Transition, TransitionGroup } from "react-transition-group";
+import axios from 'axios';
 
 const TIMEOUT = 300;
 const getTransitionStyles = {
@@ -56,13 +57,13 @@ const TransitionLayout = ({ children,title,requiredLogin }:any) => {
       // 로그인 되어있다면 
        
       console.log(BACKEND_URL + "/auth/" + jwtDecode<any>(accessToken).user_id);
-      // axios.get(
-      //   BACKEND_URL + "/auth/" + jwtDecode<any>(accessToken).user_id
-      // ).then((res:any) => { 
-      //   console.log(res.data); 
-      //   const userInfo = res.data;
-      //   dispatch({ type: "UPDATE_USER", userInfo });
-      // })
+      axios.get(
+        BACKEND_URL + "/auth/" + jwtDecode<any>(accessToken).user_id
+      ).then((res:any) => { 
+        console.log(res.data); 
+        const userInfo = res.data;
+        dispatch({ type: "UPDATE_USER", userInfo });
+      })
     }
     
   }, []); 

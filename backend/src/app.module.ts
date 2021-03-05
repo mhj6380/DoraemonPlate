@@ -6,6 +6,7 @@ import { Connection } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ChatModule } from './chat/chat.module';
 import { AppGateway } from './app.gateway';
+import { BoardModule } from './board/board.module';
 
 // import Joi from 'joi';
 
@@ -43,7 +44,8 @@ import { AppGateway } from './app.gateway';
       // synchronize: true,
     }),
     AuthModule,
-    ChatModule, 
+    ChatModule,
+    BoardModule, 
   ],
   controllers: [AppController],   
   providers: [AppGateway],   

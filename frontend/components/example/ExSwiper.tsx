@@ -1,8 +1,4 @@
 import * as React from "react";
-// import "../scss/main_image_slider.scss";
-
-// Import Swiper styles
-
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
 import "swiper/components/pagination/pagination.scss";
