@@ -14,6 +14,7 @@ import { CreateCommentDTO, UpdateCommentDTO } from './dto/comment.dto';
 import { Board, Comment } from './entities/board.entity';
 import { CreateLikeDTO } from './dto/like.dto';
 import { CreateScrapDTO } from './dto/scrap.dto';
+import { BoardItemsPaginationDTO } from './dto/board-pageination-result.dto';
 
 @Controller('board')
 export class BoardController {
@@ -49,12 +50,13 @@ export class BoardController {
     return this.boardService.getCommentChildrens(parentId);
   }
 
-  @Get('/feed/:offset/:limit')
+  @Get('/:topic/:page/:limit')
   getBoardList(
-    @Param('offset') offset: number,
+    @Param('topic') topic: string,
+    @Param('page') page: number,
     @Param('limit') limit: number,
-  ): Promise<Board[]> {
-    return this.boardService.getBoardList(offset, limit);
+  ): Promise<BoardItemsPaginationDTO> {
+    return this.boardService.getBoardList(topic, page, limit);
   }
 
   @Patch('/view-increment/:bo_id')

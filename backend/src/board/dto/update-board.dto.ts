@@ -1,4 +1,4 @@
-import { IsString, IsBoolean } from 'class-validator';
+import { IsString, IsInt, IsBoolean } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateBoardDTO } from './create-board.dto';
 
@@ -6,7 +6,7 @@ export class UpdateBoardDTO extends PartialType(CreateBoardDTO) {
   @IsString()
   readonly topic: string;
 
-  @IsString()
+  @IsInt()
   readonly id: number;
 
   @IsString()
@@ -16,7 +16,7 @@ export class UpdateBoardDTO extends PartialType(CreateBoardDTO) {
   readonly content: string;
 
   @IsString()
-  readonly author: string;
+  readonly author?: string;
 
   @IsString()
   readonly thumbnail?: string;

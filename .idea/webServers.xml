@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3ef522b4-bbe7-4de1-a622-069496d293ca" name="DoraemonPlateV1" url="http://13.124.34.245">
+        <fileTransfer host="13.124.34.245" port="22" privateKey="$USER_HOME$/Desktop/aws_key/wiz-spring.pem" rootFolder="/home/ubuntu/doraemon" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

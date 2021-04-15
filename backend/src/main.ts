@@ -2,9 +2,28 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+// import * as fs from 'fs';
 
 async function bootstrap() {
+  // const fs = require('fs');
+  // const keyFile = fs.readFileSync(
+  //   '/etc/letsencrypt/live/99link.kr/privkey.pem',
+  // );
+  // const certFile = fs.readFileSync(
+  //   '/etc/letsencrypt/live/99link.kr/fullchain.pem',
+  // );
+
+  // console.log('!- keyFile', keyFile);
+  // console.log('!- certFile', certFile);
+
   const app = await NestFactory.create(AppModule);
+
+  // const app = await NestFactory.create(AppModule, {
+  //   httpsOptions: {
+  //     key: keyFile,
+  //     cert: certFile,
+  //   },
+  // });
 
   // DTO 의 클래스 유효성검사 기능 추가
   app.useGlobalPipes(

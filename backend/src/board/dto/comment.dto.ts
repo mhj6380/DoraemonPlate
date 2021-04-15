@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsString, IsInt, IsDate, IsBoolean } from 'class-validator';
+import { Board } from '../entities/board.entity';
 
 export class CreateCommentDTO {
   @IsString()

@@ -7,6 +7,7 @@ import { UpdateBoardDTO } from './dto/update-board.dto';
 import { CreateCommentDTO } from './dto/comment.dto';
 import { CreateLikeDTO } from './dto/like.dto';
 import { CreateScrapDTO } from './dto/scrap.dto';
+import { BoardItemsPaginationDTO } from './dto/board-pageination-result.dto';
 
 @Injectable()
 export class BoardService {
@@ -40,31 +41,45 @@ export class BoardService {
     board.thumbnail = boardData.thumbnail;
 
     await this.boardRepository.save(board);
+
     return board;
   }
 
   async updateBoard(updateData: UpdateBoardDTO): Promise<void> {
-    console.log(updateData);
     await this.boardRepository.update({ id: updateData.id }, updateData);
   }
 
   async getOne(id: number): Promise<Board> {
-    const boardWithComments = await this.boardRepository
+    // const boardWithComments = await this.boardRepository
+    //   .createQueryBuilder('board')
+    //   .leftJoinAndSelect('board.authorInfo', 'authorInfo')
+    //   .leftJoinAndSelect(
+    //     'board.comments',
+    //     'comments',
+    //     'comments.isChildren = :isChildren',
+    //     { isChildren: 0 },
+    //   )
+    //   .where('board.id = :id', { id })
+    //   .getOne();
+
+    const boards = await this.boardRepository
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.authorInfo', 'authorInfo')
-      .leftJoinAndSelect(
-        'board.comments',
-        'comments',
-        'comments.isChildren = :isChildren',
-        { isChildren: 0 },
-      )
       .where('board.id = :id', { id })
       .getOne();
 
-    if (!boardWithComments)
-      throw new NotFoundException(`Not Found Board ID:${id}`);
+    const comments = await this.commentRepository
+      .createQueryBuilder('boardComment')
+      .leftJoinAndSelect('boardComment.authorInfo', 'authorInfo')
+      .where('boardComment.boardId = :boardId', { boardId: id })
+      .where('boardComment.isChildren = :isChildren', { isChildren: 0 })
+      .getMany();
 
-    return boardWithComments;
+    boards.comments = comments;
+
+    if (!boards) throw new NotFoundException(`Not Found Board ID:${id}`);
+
+    return boards;
   }
 
   async deleteBoard(id: number): Promise<any> {
@@ -115,9 +130,27 @@ export class BoardService {
     await this.boardRepository.update({ id: updateData.id }, updateData);
   }
 
-  async getBoardList(offset: number, limit: number): Promise<Board[]> {
-    console.log(offset, limit);
-    return await this.boardRepository.find();
+  async getBoardList(
+    topic: string,
+    page: number,
+    limit: number,
+  ): Promise<BoardItemsPaginationDTO> {
+    const skippedItems = (page - 1) * limit;
+    const totalCount = await this.boardRepository.count();
+    const boardItems = await this.boardRepository
+      .createQueryBuilder()
+      .where('topic=:topic', { topic })
+      .orderBy('createdAt', 'DESC')
+      .offset(skippedItems)
+      .limit(limit)
+      .getMany();
+
+    return {
+      totalCount,
+      page,
+      limit,
+      data: boardItems,
+    };
   }
 
   //조회 수 증가

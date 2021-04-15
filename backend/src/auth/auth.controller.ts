@@ -7,7 +7,6 @@ import {
   Patch,
   Body,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDTO } from './dto/login-user.dto';
@@ -15,15 +14,15 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { User } from './entities/auth.entity';
 import { AuthGuard } from '@nestjs/passport';
-// import { LocalAuthGuard } from './local-auth.guard';
 import {
-  ApiResponse,
+  // ApiResponse,
   ApiOkResponse,
   ApiUnauthorizedResponse,
   ApiCreatedResponse,
   ApiBody,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+// import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -60,7 +59,9 @@ export class AuthController {
     return this.userService.login(userData);
   }
 
+  // @ApiBearerAuth()
   @Get('/:user_id')
+  // @UseGuards(AuthGuard('jwt'))
   getOneUser(@Param('user_id') user_id: string): Promise<User> {
     return this.userService.getOne(user_id);
   }
